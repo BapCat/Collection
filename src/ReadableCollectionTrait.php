@@ -4,8 +4,6 @@
  * A basic implementation of ReadableCollectionInterface
  */
 trait ReadableCollectionTrait {
-  protected $collection = [];
-  
   public function has($key) {
     return array_key_exists($key, $this->collection);
   }
@@ -40,7 +38,7 @@ trait ReadableCollectionTrait {
   }
   
   public function first() {
-    if($this->size()) {
+    if($this->size() == 0) {
       throw new NoSuchKeyException(null, 'Can\'t get first value from empty collection');
     }
     

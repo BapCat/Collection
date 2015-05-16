@@ -17,14 +17,14 @@ class NoSuchKeyException extends Exception {
    * @param Exception $previous (optional) An exception to be wrapped by this one
    */
   public function __construct($key, $message = '', $code = 0, Exception $previous = null) {
-    parent::__construct($key, $message, $code, $previous);
-    $this->key;
+    parent::__construct($message, $code, $previous);
+    $this->key = $key;
   }
   
   /**
    * Gets the requested key which had no associated item
    */
-  public getKey() {
-    return $this->key();
+  public function getKey() {
+    return $this->key;
   }
 }
