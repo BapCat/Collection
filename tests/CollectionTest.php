@@ -117,4 +117,12 @@ class CollectionTest extends PHPUnit_Framework_TestCase {
       'key3' => 'val3'
     ], $kv);
   }
+  
+  public function testRemove() {
+    $collection = new Collection();
+    $collection->set('key', 'val');
+    $collection->remove('key');
+    
+    $this->assertEquals(0, $collection->size());
+  }
 }
