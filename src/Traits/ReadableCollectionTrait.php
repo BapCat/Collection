@@ -1,4 +1,7 @@
-<?php namespace LordMonoxide\Collection;
+<?php namespace LordMonoxide\Collection\Traits;
+
+use LordMonoxide\Collection\Exceptions\NoSuchKeyException;
+use LordMonoxide\Collection\LazyInitializer;
 
 /**
  * A basic implementation of ReadableCollectionInterface

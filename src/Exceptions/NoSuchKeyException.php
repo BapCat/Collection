@@ -1,4 +1,4 @@
-<?php namespace LordMonoxide\Collection;
+<?php namespace LordMonoxide\Collection\Exceptions;
 
 use Exception;
 

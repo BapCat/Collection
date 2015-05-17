@@ -37,7 +37,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testGetInvalidKey() {
-    $this->setExpectedException('LordMonoxide\Collection\NoSuchKeyException');
+    $this->setExpectedException('LordMonoxide\Collection\Exceptions\NoSuchKeyException');
     $collection = new Collection();
     $collection->get('IDontExist');
   }
@@ -67,7 +67,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testFirstEmpty() {
-    $this->setExpectedException('LordMonoxide\Collection\NoSuchKeyException');
+    $this->setExpectedException('LordMonoxide\Collection\Exceptions\NoSuchKeyException');
     $collection = new Collection();
     $collection->first();
   }

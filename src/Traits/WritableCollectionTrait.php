@@ -1,4 +1,6 @@
-<?php namespace LordMonoxide\Collection;
+<?php namespace LordMonoxide\Collection\Traits;
+
+use LordMonoxide\Collection\LazyInitializer;
 
 /**
  * A basic implementation of WritableCollectionInterface
@@ -20,5 +22,9 @@ trait WritableCollectionTrait {
   
   public function lazy($key, callable $initializer) {
     $this->collection[$key] = new LazyInitializer($initializer);
+  }
+  
+  public function remove($key) {
+    unset($this->collection[$key]);
   }
 }
