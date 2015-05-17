@@ -4,6 +4,8 @@
  * A basic implementation of WritableCollectionInterface
  */
 trait WritableCollectionTrait {
+  protected $collection = [];
+  
   public function __construct(array $collection = []) {
     $this->collection = $collection;
   }
