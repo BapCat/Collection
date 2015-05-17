@@ -98,4 +98,23 @@ class CollectionTest extends PHPUnit_Framework_TestCase {
     $collection->set('key2', 'val2');
     $this->assertEquals(['val1', 'val2'], $collection->values());
   }
+  
+  public function testFor() {
+    $collection = new Collection();
+    $collection->set('key1', 'val1');
+    $collection->set('key2', 'val2');
+    $collection->set('key3', 'val3');
+    
+    $kv = [];
+    
+    foreach($collection as $key => $val) {
+      $kv[$key] = $val;
+    }
+    
+    $this->assertEquals([
+      'key1' => 'val1',
+      'key2' => 'val2',
+      'key3' => 'val3'
+    ], $kv);
+  }
 }

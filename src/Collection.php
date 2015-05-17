@@ -1,5 +1,7 @@
 <?php namespace LordMonoxide\Collection;
 
-class Collection implements ReadableCollectionInterface, WritableCollectionInterface {
-  use ReadableCollectionTrait, WritableCollectionTrait;
+use IteratorAggregate;
+
+class Collection implements ReadableCollectionInterface, WritableCollectionInterface, IteratorAggregate {
+  use ReadableCollectionTrait, WritableCollectionTrait, IterableCollectionTrait;
 }
