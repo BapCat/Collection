@@ -35,5 +35,5 @@ interface WritableCollectionInterface {
    * 
    * @param mixed $key    The key to remove
    */
-  public function remove($key)
+  public function remove($key);
 }

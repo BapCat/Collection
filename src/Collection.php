@@ -6,6 +6,9 @@ use LordMonoxide\Collection\Traits\CollectionTrait;
 
 use IteratorAggregate;
 
+/**
+ * A readable, writable, iterable collection
+ */
 class Collection implements ReadableCollectionInterface, WritableCollectionInterface, IteratorAggregate {
   use CollectionTrait;
 }

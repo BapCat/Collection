@@ -30,17 +30,24 @@ trait ReadableCollectionTrait {
    * @returns mixed The value that was bound to `$key`
    */
   public function get($key, $default = null) {
+    // If the key doesn't exist...
     if(!$this->has($key)) {
+      // No default?
       if(func_num_args() < 2) {
+        // Throw exception if the key doesn't exist
         throw new NoSuchKeyException($key);
       } else {
+        // Otherwise, return the default
         return $default;
       }
     }
     
+    // Grab the value
     $value = $this->collection[$key];
     
+    // Is it a lazy-loaded value
     if($value instanceof LazyInitializer) {
+      // Evaluate and cache the result
       $value = $value($key);
       $this->collection[$key] = $value;
     }
