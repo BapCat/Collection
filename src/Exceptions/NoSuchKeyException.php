@@ -1,4 +1,4 @@
-<?php namespace LordMonoxide\Collection\Exceptions;
+<?php namespace BapCat\Collection\Exceptions;
 
 use Exception;
 

@@ -1,9 +1,9 @@
-<?php namespace LordMonoxide\Collection\Interfaces;
+<?php namespace BapCat\Collection\Interfaces;
 
 /**
  * Defines a collection that may be written to
  */
-interface WritableCollectionInterface {
+interface WritableCollection {
   /**
    * Add a value to the collection
    * 

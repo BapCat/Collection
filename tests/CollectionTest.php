@@ -1,6 +1,7 @@
 <?php
 
-use LordMonoxide\Collection\Collection;
+use BapCat\Collection\Collection;
+use BapCat\Collection\Exceptions\NoSuchKeyException;
 
 class CollectionTest extends PHPUnit_Framework_TestCase {
   public function testHas() {
@@ -37,7 +38,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testGetInvalidKey() {
-    $this->setExpectedException('LordMonoxide\Collection\Exceptions\NoSuchKeyException');
+    $this->setExpectedException(NoSuchKeyException::class);
     $collection = new Collection();
     $collection->get('IDontExist');
   }
@@ -67,7 +68,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testFirstEmpty() {
-    $this->setExpectedException('LordMonoxide\Collection\Exceptions\NoSuchKeyException');
+    $this->setExpectedException(NoSuchKeyException::class);
     $collection = new Collection();
     $collection->first();
   }

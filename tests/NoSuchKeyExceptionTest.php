@@ -1,6 +1,6 @@
 <?php
 
-use LordMonoxide\Collection\Exceptions\NoSuchKeyException;
+use BapCat\Collection\Exceptions\NoSuchKeyException;
 
 class NoSuchKeyExceptionTest extends PHPUnit_Framework_TestCase {
   public function testGetKey() {

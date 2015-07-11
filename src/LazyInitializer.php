@@ -1,4 +1,4 @@
-<?php namespace LordMonoxide\Collection;
+<?php namespace BapCat\Collection;
 
 /**
  * A class used to defer loading of collection values

@@ -1,4 +1,4 @@
-<?php namespace LordMonoxide\Collection\Traits;
+<?php namespace BapCat\Collection\Traits;
 
 use ArrayIterator;
 

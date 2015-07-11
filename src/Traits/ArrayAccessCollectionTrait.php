@@ -1,4 +1,4 @@
-<?php namespace LordMonoxide\Collection\Traits;
+<?php namespace BapCat\Collection\Traits;
 
 /**
  * Allows collection access via array access

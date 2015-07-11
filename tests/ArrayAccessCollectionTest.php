@@ -1,6 +1,6 @@
 <?php
 
-use LordMonoxide\Collection\ArrayAccessCollection;
+use BapCat\Collection\ArrayAccessCollection;
 
 class ArrayAccessCollectionTest extends PHPUnit_Framework_TestCase {
   public function testArrayAccess() {

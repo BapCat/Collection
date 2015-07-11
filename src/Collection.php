@@ -1,14 +1,22 @@
-<?php namespace LordMonoxide\Collection;
+<?php namespace BapCat\Collection;
 
-use LordMonoxide\Collection\Interfaces\ReadableCollectionInterface;
-use LordMonoxide\Collection\Interfaces\WritableCollectionInterface;
-use LordMonoxide\Collection\Traits\CollectionTrait;
+use BapCat\Collection\Interfaces\Collection as CollectionInterface;
+use BapCat\Collection\Interfaces\WritableCollection as WritableCollectionInterface;
+use BapCat\Collection\Traits\CollectionTrait;
 
 use IteratorAggregate;
 
 /**
  * A readable, writable, iterable collection
  */
-class Collection implements ReadableCollectionInterface, WritableCollectionInterface, IteratorAggregate {
+class Collection implements CollectionInterface, WritableCollectionInterface, IteratorAggregate {
   use CollectionTrait;
+  
+  public function __construct(array $initial = []) {
+    $this->collection = $initial;
+  }
+  
+  public function __new(array $initial) {
+    return new static($initial);
+  }
 }

@@ -1,6 +1,6 @@
-<?php namespace LordMonoxide\Collection\Traits;
+<?php namespace BapCat\Collection\Traits;
 
-use LordMonoxide\Collection\LazyInitializer;
+use BapCat\Collection\LazyInitializer;
 
 /**
  * A basic implementation of WritableCollectionInterface
