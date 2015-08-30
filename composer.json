@@ -1,24 +1,21 @@
 {
-    "name": "bapcat/collection",
-    "description": "Powerful but easy to use collections with support for lazy loading",
-    "license": "GPLv3",
-    "homepage": "http://github.com/BapCat/collection",
-    "keywords": ["Collection", "Array", "Storage", "Read only", "Lazy"],
-    "authors": [
-        {
-            "name": "Corey Frenette",
-            "email": "corey@narwhunderful.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.5.0"
-    },
-    "require-dev": {
-        "satooshi/php-coveralls": "dev-master"
-    },
-    "autoload": {
-    	"psr-4": {
-            "BapCat\\Collection\\": "src/"
-        }
+  "name": "bapcat/collection",
+  "description": "Powerful but easy to use collections with support for lazy loading",
+  "license": "GPLv3",
+  "homepage": "http://github.com/BapCat/collection",
+  "keywords": ["Collection", "Array", "Storage", "Read only", "Lazy"],
+  "authors": [
+    {
+      "name": "Corey Frenette",
+      "email": "corey@narwhunderful.com"
     }
+  ],
+  "require": {
+    "php": ">=5.5.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "BapCat\\Collection\\": "src/"
+    }
+  }
 }
