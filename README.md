@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/LordMonoxide/collection.svg?branch=1.0.0)](https://travis-ci.org/LordMonoxide/collection)
-[![Coverage Status](https://coveralls.io/repos/LordMonoxide/collection/badge.svg?branch=1.0.0)](https://coveralls.io/r/LordMonoxide/collection?branch=1.0.0)
-[![License](https://img.shields.io/packagist/l/LordMonoxide/collection.svg)](https://img.shields.io/packagist/l/LordMonoxide/collection.svg)
+[![Build Status](https://travis-ci.org/BapCat/Collection.svg?branch=master)](https://travis-ci.org/BapCat/Collection)
+[![Coverage Status](https://coveralls.io/repos/BapCat/Collection/badge.svg?branch=master&service=github)](https://coveralls.io/github/BapCat/Collection?branch=master)
+[![License](https://img.shields.io/packagist/l/BapCat/Collection.svg)](https://img.shields.io/packagist/l/BapCat/Collection.svg)
 
 # Collection
 A modular, trait-based collection library that puts control of your data back in your hands.
@@ -11,12 +11,12 @@ A modular, trait-based collection library that puts control of your data back in
 [Composer](https://getcomposer.org/) is the recommended method of installation for Collection.
 
 ```
-$ composer require lordmonoxide/collection
+$ composer require bapcat/collection
 ```
 
 ### GitHub
 
-Phi may be downloaded from [GitHub](https://github.com/LordMonoxide/collection/).
+This package may also be downloaded from [GitHub](https://github.com/BapCat/Collection/).
 
 ## Features
 
