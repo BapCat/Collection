@@ -36,4 +36,9 @@ interface WritableCollection {
    * @param mixed $key    The key to remove
    */
   public function remove($key);
+  
+  /**
+   * Clears the collection
+   */
+  public function clear();
 }
