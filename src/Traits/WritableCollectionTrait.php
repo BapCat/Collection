@@ -1,5 +1,6 @@
 <?php namespace BapCat\Collection\Traits;
 
+use BapCat\Collection\Exceptions\NoSuchKeyException;
 use BapCat\Collection\LazyInitializer;
 
 /**
@@ -51,6 +52,30 @@ trait WritableCollectionTrait {
    */
   public function lazy($key, callable $initializer) {
     $this->collection[$key] = new LazyInitializer($initializer);
+  }
+  
+  /**
+   * {@inheritdoc}
+   */
+  public function take($key, $default = null) {
+    if(!array_key_exists($key, $this->collection)) {
+      if(func_num_args() < 2) {
+        throw new NoSuchKeyException($key);
+      } else {
+        return $default;
+      }
+    }
+    
+    $value = $this->collection[$key];
+    
+    if($value instanceof LazyInitializer) {
+      $value = $value($key);
+      $this->collection[$key] = $value;
+    }
+    
+    $this->remove($key);
+    
+    return $value;
   }
   
   /**
