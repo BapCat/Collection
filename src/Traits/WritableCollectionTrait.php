@@ -1,7 +1,6 @@
 <?php namespace BapCat\Collection\Traits;
 
 use BapCat\Collection\Exceptions\NoSuchKeyException;
-use BapCat\Collection\LazyInitializer;
 
 /**
  * A basic implementation of WritableCollectionInterface
@@ -11,6 +10,13 @@ trait WritableCollectionTrait {
    * @var array $collection Holds all key/value pairs in the collection
    */
   protected $collection = [];
+  
+  /**
+   * Holds all lazy-loaded keys
+   * 
+   * @var  array<mixed>
+   */
+  protected $lazy = [];
   
   /**
    * Constructs a new WritableCollectionTrait
@@ -51,7 +57,8 @@ trait WritableCollectionTrait {
    *                                the desired value upon first request.
    */
   public function lazy($key, callable $initializer) {
-    $this->collection[$key] = new LazyInitializer($initializer);
+    $this->collection[$key] = $initializer;
+    $this->lazy[$key] = $key;
   }
   
   /**
@@ -67,13 +74,12 @@ trait WritableCollectionTrait {
     }
     
     $value = $this->collection[$key];
-    
-    if($value instanceof LazyInitializer) {
-      $value = $value($key);
-      $this->collection[$key] = $value;
-    }
-    
     $this->remove($key);
+    
+    if(array_key_exists($key, $this->lazy)) {
+      $value = $value($key);
+      unset($this->lazy[$key]);
+    }
     
     return $value;
   }
