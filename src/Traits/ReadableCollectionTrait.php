@@ -65,16 +65,10 @@ trait ReadableCollectionTrait {
       throw new NoSuchKeyException(null, 'Can\'t get first value from empty collection');
     }
     
-    $value = reset($this->collection);
+    reset($this->collection);
     $key = key($this->collection);
     
-    if(array_key_exists($key, $this->lazy)) {
-      $value = $value($key);
-      $this->collection[$key] = $value;
-      unset($this->lazy[$key]);
-    }
-    
-    return $value;
+    return $this->get($key);
   }
   
   /**
@@ -89,16 +83,10 @@ trait ReadableCollectionTrait {
       throw new NoSuchKeyException(null, 'Can\'t get last value from empty collection');
     }
     
-    $value = end($this->collection);
+    end($this->collection);
     $key = key($this->collection);
     
-    if(array_key_exists($key, $this->lazy)) {
-      $value = $value($key);
-      $this->collection[$key] = $value;
-      unset($this->lazy[$key]);
-    }
-    
-    return $value;
+    return $this->get($key);
   }
   
   /**
@@ -137,7 +125,7 @@ trait ReadableCollectionTrait {
    * @returns array An array of all keys contained in the collection
    */
   public function keys() {
-    return array_keys($this->all());
+    return array_keys($this->collection);
   }
   
   /**
@@ -155,7 +143,7 @@ trait ReadableCollectionTrait {
    * @returns int The size of the collection
    */
   public function size() {
-    return count($this->all());
+    return count($this->collection);
   }
   
   /**
