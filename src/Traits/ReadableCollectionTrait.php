@@ -1,7 +1,6 @@
 <?php namespace BapCat\Collection\Traits;
 
 use BapCat\Collection\Exceptions\NoSuchKeyException;
-use BapCat\Collection\LazyInitializer;
 use BapCat\Collection\Interfaces\Collection;
 
 /**
@@ -43,14 +42,12 @@ trait ReadableCollectionTrait {
       }
     }
     
-    // Grab the value
     $value = $this->collection[$key];
     
-    // Is it a lazy-loaded value
-    if($value instanceof LazyInitializer) {
-      // Evaluate and cache the result
+    if(array_key_exists($key, $this->lazy)) {
       $value = $value($key);
       $this->collection[$key] = $value;
+      unset($this->lazy[$key]);
     }
     
     return $value;
@@ -68,7 +65,16 @@ trait ReadableCollectionTrait {
       throw new NoSuchKeyException(null, 'Can\'t get first value from empty collection');
     }
     
-    return reset($this->collection);
+    $value = reset($this->collection);
+    $key = key($this->collection);
+    
+    if(array_key_exists($key, $this->lazy)) {
+      $value = $value($key);
+      $this->collection[$key] = $value;
+      unset($this->lazy[$key]);
+    }
+    
+    return $value;
   }
   
   /**
@@ -83,7 +89,16 @@ trait ReadableCollectionTrait {
       throw new NoSuchKeyException(null, 'Can\'t get last value from empty collection');
     }
     
-    return end($this->collection);
+    $value = end($this->collection);
+    $key = key($this->collection);
+    
+    if(array_key_exists($key, $this->lazy)) {
+      $value = $value($key);
+      $this->collection[$key] = $value;
+      unset($this->lazy[$key]);
+    }
+    
+    return $value;
   }
   
   /**
@@ -93,6 +108,14 @@ trait ReadableCollectionTrait {
    *                values contained in the collection.
    */
   public function all() {
+    if(!empty($this->lazy)) {
+      foreach($this->lazy as $key) {
+        $this->collection[$key] = $this->collection[$key]($key);
+      }
+      
+      $this->lazy = [];
+    }
+    
     return $this->collection;
   }
   
@@ -105,7 +128,7 @@ trait ReadableCollectionTrait {
    *                           `function($key, $value)`
    */
   public function each(callable $callback) {
-    array_walk($this->collection, $callback);
+    array_walk($this->all(), $callback);
   }
   
   /**
@@ -114,7 +137,7 @@ trait ReadableCollectionTrait {
    * @returns array An array of all keys contained in the collection
    */
   public function keys() {
-    return array_keys($this->collection);
+    return array_keys($this->all());
   }
   
   /**
@@ -123,7 +146,7 @@ trait ReadableCollectionTrait {
    * @returns array An array of all values contained in the collection
    */
   public function values() {
-    return array_values($this->collection);
+    return array_values($this->all());
   }
   
   /**
@@ -132,7 +155,7 @@ trait ReadableCollectionTrait {
    * @returns int The size of the collection
    */
   public function size() {
-    return count($this->collection);
+    return count($this->all());
   }
   
   /**

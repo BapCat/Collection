@@ -31,6 +31,17 @@ interface WritableCollection {
   public function lazy($key, callable $initializer);
   
   /**
+   * Removes a key from the collection and returns its value
+   * 
+   * @param  mixed  $key      The key
+   * @param  mixed  $default  (optional) A default value to return if the collection does not
+   *                          contain `$key`.  Prevents NoSuchValueException from being thrown.
+   * 
+   * @return mixed            The value associated with the key
+   */
+  public function take($key, $default = null);
+  
+  /**
    * Removes a key from the array
    * 
    * @param mixed $key    The key to remove
