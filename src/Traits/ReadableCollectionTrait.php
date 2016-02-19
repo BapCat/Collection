@@ -116,7 +116,8 @@ trait ReadableCollectionTrait {
    *                           `function($key, $value)`
    */
   public function each(callable $callback) {
-    array_walk($this->all(), $callback);
+    $all = $this->all();
+    array_walk($all, $callback);
   }
   
   /**
