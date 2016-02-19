@@ -6,6 +6,7 @@ use BapCat\Collection\Traits\WritableCollectionTrait;
 class WritableCollectionTraitTest extends PHPUnit_Framework_TestCase {
   private $trait;
   private $collection;
+  private $lazy;
   
   public function setUp() {
     $this->trait = $this
@@ -16,6 +17,9 @@ class WritableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $class = new ReflectionClass($this->trait);
     $this->collection = $class->getProperty('collection');
     $this->collection->setAccessible(true);
+    
+    $this->lazy = $class->getProperty('lazy');
+    $this->lazy->setAccessible(true);
   }
   
   public function testAdd() {
@@ -45,6 +49,29 @@ class WritableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame(['test', 'key1' => 'val1'], $this->getCollection());
   }
   
+  public function testLazyLoading() {
+    $val1 = function($key) {
+      return 'val1';
+    };
+    
+    $val2 = function($key) {
+      return 'val2';
+    };
+    
+    $this->trait->lazy('key1', $val1);
+    $this->trait->lazy('key2', $val2);
+    
+    $this->assertSame([
+      'key1' => $val1,
+      'key2' => $val2
+    ], $this->getCollection());
+    
+    $this->assertSame([
+      'key1' => 'key1',
+      'key2' => 'key2'
+    ], $this->getLazy());
+  }
+  
   public function testTake() {
     $this->setCollection(['key1' => 'val1', 'key2' => 'val2']);
     
@@ -55,6 +82,24 @@ class WritableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     
     $this->setExpectedException(NoSuchKeyException::class);
     $this->trait->take('non-existant key');
+  }
+  
+  public function testLazyTake() {
+    $val1 = function($key) {
+      return 'val1';
+    };
+    
+    $val2 = function($key) {
+      return 'val2';
+    };
+    
+    $this->trait->lazy('key1', $val1);
+    $this->trait->lazy('key2', $val2);
+    
+    $this->assertSame('val1', $this->trait->take('key1'));
+    
+    $this->assertSame(['key2' => $val2], $this->getCollection());
+    $this->assertSame(['key2' => 'key2'], $this->getLazy());
   }
   
   public function testRemove() {
@@ -81,5 +126,10 @@ class WritableCollectionTraitTest extends PHPUnit_Framework_TestCase {
   
   private function setCollection(array $collection) {
     $this->collection->setValue($this->trait, $collection);
+  }
+  
+  // Go on, you know you want to
+  private function getLazy() {
+    return $this->lazy->getValue($this->trait);
   }
 }
