@@ -92,4 +92,11 @@ trait WritableCollectionTrait {
   public function remove($key) {
     unset($this->collection[$key]);
   }
+  
+  /**
+   * {@inheritdoc}
+   */
+  public function clear() {
+    $this->collection = [];
+  }
 }
