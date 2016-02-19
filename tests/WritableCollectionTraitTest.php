@@ -67,6 +67,14 @@ class WritableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame(['key2' => 'val2'], $this->getCollection());
   }
   
+  public function testClear() {
+    $this->setCollection(['key1' => 'val1', 'key2' => 'val2']);
+    
+    $this->trait->clear();
+    
+    $this->assertEmpty($this->getCollection());
+  }
+  
   private function getCollection() {
     return $this->collection->getValue($this->trait);
   }
