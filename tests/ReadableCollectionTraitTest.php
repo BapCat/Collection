@@ -1,22 +1,14 @@
 <?php
 
 use BapCat\Collection\Exceptions\NoSuchKeyException;
+use BapCat\Collection\Interfaces\Collection;
 use BapCat\Collection\Traits\ReadableCollectionTrait;
 
 class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
   private $trait;
   
   public function setUp() {
-    $this->trait = $this
-      ->getMockBuilder(ReadableCollectionTrait::class)
-      ->getMockForTrait()
-    ;
-    
-    // The trait requires $collection and $lazy to be set...
-    // We can just create them as public properties from the
-    // outside for these tests because PHP is weird like that
-    $this->trait->collection = [];
-    $this->trait->lazy       = [];
+    $this->trait = $this->mockTrait();
   }
   
   public function testHas() {
@@ -243,5 +235,349 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     
     unset($this->trait->collection['key1']);
     $this->assertSame(1, $this->trait->size());
+  }
+  
+  public function testMerge() {
+    $collection = $this->mockCollection(['key2' => 'val2']);
+    
+    $this->trait->collection['key1'] = 'val1';
+    
+    $merged = $this->trait->merge($collection);
+    
+    $this->assertSame([
+      'key1' => 'val1',
+      'key2' => 'val2'
+    ], $merged->all());
+  }
+  
+  public function testDistinct() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val1';
+    $this->trait->collection['key3'] = 'val2';
+    
+    $distinct = $this->trait->distinct();
+    
+    $this->assertSame([
+      'key1' => 'val1',
+      'key3' => 'val2'
+    ], $distinct->all());
+  }
+  
+  public function testReverse() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $reversed = $this->trait->reverse();
+    
+    $this->assertSame([
+      'key3' => 'val3',
+      'key2' => 'val2',
+      'key1' => 'val1'
+    ], $reversed->all());
+  }
+  
+  public function testFlip() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $reversed = $this->trait->flip();
+    
+    $this->assertSame([
+      'val1' => 'key1',
+      'val2' => 'key2',
+      'val3' => 'key3'
+    ], $reversed->all());
+  }
+  
+  public function testSlicePositiveOffset() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $slice = $this->trait->slice(2);
+    
+    $this->assertSame([
+      'key3' => 'val3'
+    ], $slice->all());
+  }
+  
+  public function testSlicePositiveOffsetWithPositiveLength() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $slice = $this->trait->slice(1, 1);
+    
+    $this->assertSame([
+      'key2' => 'val2'
+    ], $slice->all());
+  }
+  
+  public function testSlicePositiveOffsetWithNegativeLength() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $slice = $this->trait->slice(0, -1);
+    
+    $this->assertSame([
+      'key1' => 'val1',
+      'key2' => 'val2'
+    ], $slice->all());
+  }
+  
+  public function testSliceNegativeOffset() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $slice = $this->trait->slice(-2);
+    
+    $this->assertSame([
+      'key2' => 'val2',
+      'key3' => 'val3'
+    ], $slice->all());
+  }
+  
+  public function testSliceNegativeOffsetWithPositiveLength() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $slice = $this->trait->slice(-3, 2);
+    
+    $this->assertSame([
+      'key1' => 'val1',
+      'key2' => 'val2'
+    ], $slice->all());
+  }
+  
+  public function testSliceNegativeOffsetWithNegativeLength() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $slice = $this->trait->slice(-2, -1);
+    
+    $this->assertSame([
+      'key2' => 'val2'
+    ], $slice->all());
+  }
+  
+  public function testSplicePositiveOffsetPositiveLengthNoReplacement() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $splice = $this->trait->splice(1, 1);
+    
+    $this->assertSame([
+      'key1' => 'val1',
+      'key3' => 'val3'
+    ], $splice->all());
+  }
+  
+  public function testSplicePositiveOffsetNegativeLengthNoReplacement() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $splice = $this->trait->splice(1, -1);
+    
+    $this->assertSame([
+      'key1' => 'val1',
+      'key3' => 'val3'
+    ], $splice->all());
+  }
+  
+  public function testSpliceNegativeOffsetPositiveLengthNoReplacement() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $splice = $this->trait->splice(-2, 1);
+    
+    $this->assertSame([
+      'key1' => 'val1',
+      'key3' => 'val3'
+    ], $splice->all());
+  }
+  
+  public function testSpliceNegativeOffsetNegativeLengthNoReplacement() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $splice = $this->trait->splice(-2, -1);
+    
+    $this->assertSame([
+      'key1' => 'val1',
+      'key3' => 'val3'
+    ], $splice->all());
+  }
+  
+  public function testSplicePositiveOffsetPositiveLengthWithReplacement() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $replacement = $this->mockCollection(['newkey' => 'newval']);
+    
+    $splice = $this->trait->splice(1, 1, $replacement);
+    
+    $this->assertSame([
+      'key1' => 'val1',
+      0 => 'newval',
+      'key3' => 'val3'
+    ], $splice->all());
+  }
+  
+  public function testSplicePositiveOffsetNegativeLengthWithReplacement() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $replacement = $this->mockCollection(['newkey' => 'newval']);
+    
+    $splice = $this->trait->splice(1, -1, $replacement);
+    
+    $this->assertSame([
+      'key1' => 'val1',
+      0 => 'newval',
+      'key3' => 'val3'
+    ], $splice->all());
+  }
+  
+  public function testSpliceNegativeOffsetPositiveLengthWithReplacement() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $replacement = $this->mockCollection(['newkey' => 'newval']);
+    
+    $splice = $this->trait->splice(-2, 1, $replacement);
+    
+    $this->assertSame([
+      'key1' => 'val1',
+      0 => 'newval',
+      'key3' => 'val3'
+    ], $splice->all());
+  }
+  
+  public function testSpliceNegativeOffsetNegativeLengthWithReplacement() {
+    $this->trait->collection['key1'] = 'val1';
+    $this->trait->collection['key2'] = 'val2';
+    $this->trait->collection['key3'] = 'val3';
+    
+    $replacement = $this->mockCollection(['newkey' => 'newval']);
+    
+    $splice = $this->trait->splice(-2, -1, $replacement);
+    
+    $this->assertSame([
+      'key1' => 'val1',
+      0 => 'newval',
+      'key3' => 'val3'
+    ], $splice->all());
+  }
+  
+  public function testFilter() {
+    $this->trait->collection[0] = 0;
+    $this->trait->collection['a'] = 1;
+    $this->trait->collection[1] = 'a';
+    $this->trait->collection['b'] = 'b';
+    
+    $filtered = $this->trait->filter(function($key, $val) {
+      return is_numeric($key) || is_numeric($val);
+    });
+    
+    $this->assertSame([
+      0 => 0,
+      'a' => 1,
+      1 => 'a'
+    ], $filtered->all());
+  }
+  
+  public function testFilterByKeys() {
+    $this->trait->collection[0] = 0;
+    $this->trait->collection['a'] = 1;
+    $this->trait->collection[1] = 'a';
+    $this->trait->collection['b'] = 'b';
+    
+    $filtered = $this->trait->filterByKeys('is_numeric');
+    
+    $this->assertSame([
+      0 => 0,
+      1 => 'a'
+    ], $filtered->all());
+  }
+  
+  public function testFilterByValues() {
+    $this->trait->collection[0] = 0;
+    $this->trait->collection['a'] = 1;
+    $this->trait->collection[1] = 'a';
+    $this->trait->collection['b'] = 'b';
+    
+    $filtered = $this->trait->filterByValues('is_numeric');
+    
+    $this->assertSame([
+      0 => 0,
+      'a' => 1
+    ], $filtered->all());
+  }
+  
+  public function testMap() {
+    $this->trait->collection[0] = 'a';
+    $this->trait->collection[1] = 'b';
+    $this->trait->collection[2] = 'c';
+    $this->trait->collection[3] = 'd';
+    
+    $mapped = $this->trait->map('strtoupper');
+    
+    $this->assertSame([
+      0 => 'A',
+      1 => 'B',
+      2 => 'C',
+      3 => 'D'
+    ], $mapped->all());
+  }
+  
+  private function mockTrait(array $values = []) {
+    $trait = $this
+      ->getMockBuilder(ReadableCollectionTrait::class)
+      ->setMethods(['__new'])
+      ->getMockForTrait()
+    ;
+    
+    $trait
+      ->method('__new')
+      ->will($this->returnCallback(function(array $values) {
+        return $this->mockTrait($values);
+      }))
+    ;
+    
+    // The trait requires $collection and $lazy to be set...
+    // We can just create them as public properties from the
+    // outside for these tests because PHP is weird like that
+    $trait->collection = $values;
+    $trait->lazy       = [];
+    
+    return $trait;
+  }
+  
+  private function mockCollection(array $values = []) {
+    $collection = $this
+      ->getMockBuilder(Collection::class)
+      ->setMethods(['all'])
+      ->getMockForAbstractClass()
+    ;
+    
+    $collection
+      ->method('all')
+      ->willReturn($values)
+    ;
+    
+    return $collection;
   }
 }
