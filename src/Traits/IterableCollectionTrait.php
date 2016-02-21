@@ -12,6 +12,6 @@ trait IterableCollectionTrait {
    * @returns ArrayIterator Necessary for iteration
    */
   public function getIterator() {
-    return new ArrayIterator($this->collection);
+    return new ArrayIterator($this->all());
   }
 }
