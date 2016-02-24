@@ -204,15 +204,25 @@ trait ReadableCollectionTrait {
    * Removes a contiguous section of this collection and optionally replaces
    * it with the content of `$replacement`
    * 
+   * @note This function <b>will not</b> preserve keys
+   * 
    * @returns Collection  A new collection containing a contiguous subset of
    *                      this collection
    */
-  public function splice($offset, $length = null, Collection $replacement = null) {
-    return $this->__new(array_splice($this->all(), $offset, $length, $replacement ? $replacement->all() : null));
+  public function splice($offset, $length, Collection $replacement = null) {
+    $all = $this->all();
+    
+    if($replacement === null) {
+      array_splice($all, $offset, $length);
+    } else {
+      array_splice($all, $offset, $length, $replacement ? $replacement->all() : null);
+    }
+    
+    return $this->__new($all);
   }
   
   /**
-   * Filters a collection based on a callback
+   * Filters a collection based on its keys and values
    * 
    * @param   callable    $callback A callback to be called with the key and
    *                                value of each item in the collection.
@@ -225,7 +235,41 @@ trait ReadableCollectionTrait {
    *                      this collection
    */
   public function filter(callable $callback) {
-    return array_filter($this->all(), $callback);
+    return $this->__new(array_filter($this->all(), $callback, ARRAY_FILTER_USE_BOTH));
+  }
+  
+  /**
+   * Filters a collection based on its keys
+   * 
+   * @param   callable    $callback A callback to be called with the key and
+   *                                value of each item in the collection.
+   *                                `function($key)`
+   *                                The callback should return `true` to include
+   *                                the key and value in the new collection, and
+   *                                false otherwise
+   * 
+   * @returns Collection  A new collection containing a subset of the values of
+   *                      this collection
+   */
+  public function filterByKeys(callable $callback) {
+    return $this->__new(array_filter($this->all(), $callback, ARRAY_FILTER_USE_KEY));
+  }
+  
+  /**
+   * Filters a collection based on its values
+   * 
+   * @param   callable    $callback A callback to be called with the key and
+   *                                value of each item in the collection.
+   *                                `function($value)`
+   *                                The callback should return `true` to include
+   *                                the key and value in the new collection, and
+   *                                false otherwise
+   * 
+   * @returns Collection  A new collection containing a subset of the values of
+   *                      this collection
+   */
+  public function filterByValues(callable $callback) {
+    return $this->__new(array_filter($this->all(), $callback));
   }
   
   /**
@@ -242,6 +286,6 @@ trait ReadableCollectionTrait {
    *                      this collection
    */
   public function map(callable $callback) {
-    return array_map($callback, $this->all());
+    return $this->__new(array_map($callback, $this->all()));
   }
 }
