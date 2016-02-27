@@ -13,6 +13,9 @@ class ReadOnlyCollection implements CollectionInterface, IteratorAggregate {
   use ReadableCollectionTrait;
   use IterableCollectionTrait;
   
+  protected $collection = [];
+  protected $lazy = [];
+  
   public function __construct(array $initial = []) {
     $this->collection = $initial;
   }
