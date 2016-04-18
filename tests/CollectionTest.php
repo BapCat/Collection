@@ -31,7 +31,13 @@ class CollectionTest extends PHPUnit_Framework_TestCase {
   
   public function testInstantiator() {
     $collection = new Collection();
-    
     $this->assertInstanceOf(Collection::class, $collection->__new([]));
+  }
+  
+  public function testCountable() {
+    $collection = new Collection();
+    $this->assertSame(0, count($collection));
+    $collection = new Collection([1,2,3]);
+    $this->assertSame(3, count($collection));
   }
 }

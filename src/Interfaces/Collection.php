@@ -84,6 +84,13 @@ interface Collection {
    * @returns int The size of the collection
    */
   public function size();
+
+  /**
+   * Get the size of the collection
+   * 
+   * @returns int The size of the collection
+   */
+  public function count();
   
   /**
    * Merges two collections together.  If the arrays contain `string` keys, the values

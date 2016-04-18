@@ -4,12 +4,13 @@ use BapCat\Collection\Interfaces\Collection as CollectionInterface;
 use BapCat\Collection\Interfaces\WritableCollection as WritableCollectionInterface;
 use BapCat\Collection\Traits\CollectionTrait;
 
+use Countable;
 use IteratorAggregate;
 
 /**
  * A readable, writable, iterable collection
  */
-class Collection implements CollectionInterface, WritableCollectionInterface, IteratorAggregate {
+class Collection implements Countable, CollectionInterface, WritableCollectionInterface, IteratorAggregate {
   use CollectionTrait;
   
   public function __construct(array $initial = []) {
