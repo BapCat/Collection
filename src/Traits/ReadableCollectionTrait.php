@@ -146,6 +146,18 @@ trait ReadableCollectionTrait {
   public function size() {
     return count($this->collection);
   }
+
+  /**
+   * Get the number of elements in the collection; Required for Countable interface
+   * 
+   * @see Countable
+   * @see self::size()
+   * 
+   * @return int The size of the collection
+   */
+  public function count() {
+    return $this->size();
+  }
   
   /**
    * Merges two collections together.  If the arrays contain `string` keys, the values

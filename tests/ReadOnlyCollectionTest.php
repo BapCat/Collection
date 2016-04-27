@@ -34,4 +34,11 @@ class ReadOnlyCollectionTest extends PHPUnit_Framework_TestCase {
     
     $this->assertInstanceOf(ReadOnlyCollection::class, $collection->__new([]));
   }
+
+  public function testCountable() {
+    $collection = new ReadOnlyCollection();
+    $this->assertSame(0, count($collection));
+    $collection = new ReadOnlyCollection([1,2,3]);
+    $this->assertSame(3, count($collection));
+  }
 }
