@@ -156,7 +156,7 @@ trait ReadableCollectionTrait {
    * @return int The size of the collection
    */
   public function count() {
-    return count($this->collection);
+    return $this->size();
   }
   
   /**
