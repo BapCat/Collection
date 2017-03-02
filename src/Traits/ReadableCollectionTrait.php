@@ -12,22 +12,41 @@ trait ReadableCollectionTrait {
    * 
    * @param   mixed $key  The key
    * 
-   * @returns bool  True if the key exists, false otherwise
+   * @return bool  True if the key exists, false otherwise
    */
   public function has($key) {
     return array_key_exists($key, $this->collection);
   }
   
   /**
+   * Search for a value and return its key
+   * 
+   * @throws  NoSuchKeyException  If `$value` wasn't found
+   * 
+   * @param  mixed  $value
+   * 
+   * @return  int|string  The key
+   */
+  public function search($value) {
+    $key = array_search($value, $this->collection, true);
+    
+    if($key === false) {
+      throw new NoSuchKeyException(null, 'No key was found when searching for ' . var_export($value, true));
+    }
+    
+    return $key;
+  }
+  
+  /**
    * Get a value from the collection
    * 
-   * @throws  NoSuchValueException If `$key` refers to a value that does not exist
+   * @throws  NoSuchKeyException If `$key` refers to a value that does not exist
    * 
    * @param mixed $key      The key for which to get a value
    * @param mixed $default  (optional) A default value to return if the collection does not
-   *                        contain `$key`.  Prevents NoSuchValueException from being thrown.
+   *                        contain `$key`.  Prevents NoSuchKeyException from being thrown.
    * 
-   * @returns mixed The value that was bound to `$key`
+   * @return mixed The value that was bound to `$key`
    */
   public function get($key, $default = null) {
     // If the key doesn't exist...
@@ -56,13 +75,13 @@ trait ReadableCollectionTrait {
   /**
    * Get the first value from the collection
    * 
-   * @throws  NoSuchValueException If the collection is empty
+   * @throws  NoSuchKeyException If the collection is empty
    * 
-   * @returns mixed The first value from the collection
+   * @return mixed The first value from the collection
    */
   public function first() {
     if($this->size() == 0) {
-      throw new NoSuchKeyException(null, 'Can\'t get first value from empty collection');
+      throw new NoSuchKeyException(null, "Can't get first value from empty collection");
     }
     
     reset($this->collection);
@@ -72,15 +91,33 @@ trait ReadableCollectionTrait {
   }
   
   /**
+   * Get the first key and value from the collection
+   * 
+   * @throws  NoSuchKeyException If the collection is empty
+   * 
+   * @return  array  The first key and value from the collection
+   */
+  public function firstPair() {
+    if($this->size() == 0) {
+      throw new NoSuchKeyException(null, "Can't get first value from empty collection");
+    }
+    
+    reset($this->collection);
+    $key = key($this->collection);
+    
+    return [$key, $this->get($key)];
+  }
+  
+  /**
    * Get the last value from the collection
    * 
-   * @throws  NoSuchValueException If the collection is empty
+   * @throws  NoSuchKeyException If the collection is empty
    * 
-   * @returns mixed The last value from the collection
+   * @return mixed The last value from the collection
    */
   public function last() {
     if($this->size() == 0) {
-      throw new NoSuchKeyException(null, 'Can\'t get last value from empty collection');
+      throw new NoSuchKeyException(null, "Can't get last value from empty collection");
     }
     
     end($this->collection);
@@ -90,9 +127,27 @@ trait ReadableCollectionTrait {
   }
   
   /**
+   * Get the last key and value from the collection
+   * 
+   * @throws  NoSuchKeyException If the collection is empty
+   * 
+   * @return  mixed  The last key and value from the collection
+   */
+  public function lastPair() {
+    if($this->size() == 0) {
+      throw new NoSuchKeyException(null, "Can't get last value from empty collection");
+    }
+    
+    end($this->collection);
+    $key = key($this->collection);
+    
+    return [$key => $this->get($key)];
+  }
+  
+  /**
    * Get all keys and values from the collection
    * 
-   * @returns array An associative array of all keys and
+   * @return array An associative array of all keys and
    *                values contained in the collection.
    */
   public function all() {
@@ -123,7 +178,7 @@ trait ReadableCollectionTrait {
   /**
    * Get all keys from the collection
    * 
-   * @returns array An array of all keys contained in the collection
+   * @return array An array of all keys contained in the collection
    */
   public function keys() {
     return array_keys($this->collection);
@@ -132,7 +187,7 @@ trait ReadableCollectionTrait {
   /**
    * Get all values from the collection
    * 
-   * @returns array An array of all values contained in the collection
+   * @return array An array of all values contained in the collection
    */
   public function values() {
     return array_values($this->all());
@@ -141,7 +196,7 @@ trait ReadableCollectionTrait {
   /**
    * Get the size of the collection
    * 
-   * @returns int The size of the collection
+   * @return int The size of the collection
    */
   public function size() {
     return count($this->collection);
@@ -153,7 +208,7 @@ trait ReadableCollectionTrait {
    * 
    * @param   Collection  $other  The collection to merge with this one
    * 
-   * @returns Collection  A new collection containing this collection
+   * @return Collection  A new collection containing this collection
    *                      with `$other` merged with it
    */
   public function merge(Collection $other) {
@@ -163,7 +218,7 @@ trait ReadableCollectionTrait {
   /**
    * Returns a new collection with only the distinct values
    * 
-   * @returns Collection  A new collection containing only the distinct
+   * @return Collection  A new collection containing only the distinct
    *                      values from this collection
    */
   public function distinct() {
@@ -173,7 +228,7 @@ trait ReadableCollectionTrait {
   /**
    * Returns a new collection with the keys and values from this collection reversed
    * 
-   * @returns Collection  A new collection containing the keys and values from this
+   * @return Collection  A new collection containing the keys and values from this
    *                      collection reversed (`[a => b, c => d]` to `[c => d, a => b]`)
    */
   public function reverse() {
@@ -183,7 +238,7 @@ trait ReadableCollectionTrait {
   /**
    * Returns a new collection with the keys and values from this collection swapped
    * 
-   * @returns Collection  A new collection containing the keys and values from this
+   * @return Collection  A new collection containing the keys and values from this
    *                      collection swapped (`[a => b, c => d]` to `[b => a, d => c]`)
    */
   public function flip() {
@@ -193,7 +248,7 @@ trait ReadableCollectionTrait {
   /**
    * Extracts a contiguous section of this collection into a new collection
    * 
-   * @returns Collection  A new collection containing a contiguous subset of
+   * @return Collection  A new collection containing a contiguous subset of
    *                      this collection
    */
   public function slice($offset, $length = null) {
@@ -206,7 +261,7 @@ trait ReadableCollectionTrait {
    * 
    * @note This function <b>will not</b> preserve keys
    * 
-   * @returns Collection  A new collection containing a contiguous subset of
+   * @return Collection  A new collection containing a contiguous subset of
    *                      this collection
    */
   public function splice($offset, $length, Collection $replacement = null) {
@@ -231,7 +286,7 @@ trait ReadableCollectionTrait {
    *                                the key and value in the new collection, and
    *                                false otherwise
    * 
-   * @returns Collection  A new collection containing a subset of the values of
+   * @return Collection  A new collection containing a subset of the values of
    *                      this collection
    */
   public function filter(callable $callback) {
@@ -248,7 +303,7 @@ trait ReadableCollectionTrait {
    *                                the key and value in the new collection, and
    *                                false otherwise
    * 
-   * @returns Collection  A new collection containing a subset of the values of
+   * @return Collection  A new collection containing a subset of the values of
    *                      this collection
    */
   public function filterByKeys(callable $callback) {
@@ -265,7 +320,7 @@ trait ReadableCollectionTrait {
    *                                the key and value in the new collection, and
    *                                false otherwise
    * 
-   * @returns Collection  A new collection containing a subset of the values of
+   * @return Collection  A new collection containing a subset of the values of
    *                      this collection
    */
   public function filterByValues(callable $callback) {
@@ -282,7 +337,7 @@ trait ReadableCollectionTrait {
    *                                The callback should return the value, or
    *                                a modified version of it
    * 
-   * @returns Collection  A new collection containing a modified version of
+   * @return Collection  A new collection containing a modified version of
    *                      this collection
    */
   public function map(callable $callback) {
