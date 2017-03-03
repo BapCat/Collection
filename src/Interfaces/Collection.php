@@ -115,6 +115,13 @@ interface Collection {
   public function size();
   
   /**
+   * True if the collection is empty
+   * 
+   * @return  bool
+   */
+  public function isEmpty();
+  
+  /**
    * Merges two collections together.  If the arrays contain `string` keys, the values
    * from `$other` will take precedence during key collisions
    * 
