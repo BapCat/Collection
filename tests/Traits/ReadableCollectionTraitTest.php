@@ -543,6 +543,16 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     ], $mapped->all());
   }
   
+  public function testJoin() {
+    $this->trait->collection[0] = 'a';
+    $this->trait->collection[1] = 'b';
+    $this->trait->collection[2] = 'c';
+    $this->trait->collection[3] = 'd';
+    
+    $this->assertSame('abcd', $this->trait->join());
+    $this->assertSame('a-b-c-d', $this->trait->join('-'));
+  }
+  
   private function mockTrait(array $values = []) {
     $trait = $this
       ->getMockBuilder(ReadableCollectionTrait::class)

@@ -195,4 +195,13 @@ interface Collection {
    *                      this collection
    */
   public function map(callable $callback);
+  
+  /**
+   * Concatenate all elements of the collection together, using `$glue` as a delimeter
+   * 
+   * @param  string  $glue  (default: empty string)
+   * 
+   * @return  string
+   */
+  public function join($glue = '');
 }

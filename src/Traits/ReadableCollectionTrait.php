@@ -343,4 +343,15 @@ trait ReadableCollectionTrait {
   public function map(callable $callback) {
     return $this->__new(array_map($callback, $this->all()));
   }
+  
+  /**
+   * Concatenate all elements of the collection together, using `$glue` as a delimeter
+   * 
+   * @param  string  $glue  (default: empty string)
+   * 
+   * @return  string
+   */
+  public function join($glue = '') {
+    return implode($glue, $this->all());
+  }
 }
