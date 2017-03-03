@@ -19,6 +19,9 @@
   "autoload": {
     "psr-4": {
       "BapCat\\Collection\\": "src/"
-    }
+    },
+    "files": [
+      "src/functions.php"
+    ]
   }
 }
