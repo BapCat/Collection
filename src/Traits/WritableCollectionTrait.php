@@ -98,5 +98,6 @@ trait WritableCollectionTrait {
    */
   public function clear() {
     $this->collection = [];
+    $this->lazy = [];
   }
 }
