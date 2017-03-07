@@ -112,8 +112,8 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertEmpty($this->trait->lazy);
   }
   
-  public function testAll() {
-    $this->assertEmpty($this->trait->all());
+  public function testToArray() {
+    $this->assertEmpty($this->trait->toArray());
     
     $this->trait->collection['key1'] = 'val1';
     $this->trait->collection['key2'] = 'val2';
@@ -121,10 +121,10 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key1' => 'val1',
       'key2' => 'val2'
-    ], $this->trait->all());
+    ], $this->trait->toArray());
   }
   
-  public function testLazyAll() {
+  public function testLazyToArray() {
     $this->trait->collection['key1'] = function($key) {
       return 'val1';
     };
@@ -139,7 +139,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key1' => 'val1',
       'key2' => 'val2'
-    ], $this->trait->all());
+    ], $this->trait->toArray());
     
     $this->assertEmpty($this->trait->lazy);
   }
@@ -191,7 +191,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key1',
       'key2'
-    ], $this->trait->keys());
+    ], $this->trait->keys()->toArray());
   }
   
   public function testValues() {
@@ -201,7 +201,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'val1',
       'val2'
-    ], $this->trait->values());
+    ], $this->trait->values()->toArray());
   }
   
   public function testLazyValues() {
@@ -219,7 +219,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'val1',
       'val2'
-    ], $this->trait->values());
+    ], $this->trait->values()->toArray());
     
     $this->assertEmpty($this->trait->lazy);
   }
@@ -247,7 +247,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key1' => 'val1',
       'key2' => 'val2'
-    ], $merged->all());
+    ], $merged->toArray());
   }
   
   public function testDistinct() {
@@ -260,7 +260,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key1' => 'val1',
       'key3' => 'val2'
-    ], $distinct->all());
+    ], $distinct->toArray());
   }
   
   public function testReverse() {
@@ -274,7 +274,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
       'key3' => 'val3',
       'key2' => 'val2',
       'key1' => 'val1'
-    ], $reversed->all());
+    ], $reversed->toArray());
   }
   
   public function testFlip() {
@@ -288,7 +288,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
       'val1' => 'key1',
       'val2' => 'key2',
       'val3' => 'key3'
-    ], $reversed->all());
+    ], $reversed->toArray());
   }
   
   public function testSlicePositiveOffset() {
@@ -300,7 +300,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     
     $this->assertSame([
       'key3' => 'val3'
-    ], $slice->all());
+    ], $slice->toArray());
   }
   
   public function testSlicePositiveOffsetWithPositiveLength() {
@@ -312,7 +312,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     
     $this->assertSame([
       'key2' => 'val2'
-    ], $slice->all());
+    ], $slice->toArray());
   }
   
   public function testSlicePositiveOffsetWithNegativeLength() {
@@ -325,7 +325,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key1' => 'val1',
       'key2' => 'val2'
-    ], $slice->all());
+    ], $slice->toArray());
   }
   
   public function testSliceNegativeOffset() {
@@ -338,7 +338,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key2' => 'val2',
       'key3' => 'val3'
-    ], $slice->all());
+    ], $slice->toArray());
   }
   
   public function testSliceNegativeOffsetWithPositiveLength() {
@@ -351,7 +351,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key1' => 'val1',
       'key2' => 'val2'
-    ], $slice->all());
+    ], $slice->toArray());
   }
   
   public function testSliceNegativeOffsetWithNegativeLength() {
@@ -363,7 +363,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     
     $this->assertSame([
       'key2' => 'val2'
-    ], $slice->all());
+    ], $slice->toArray());
   }
   
   public function testSplicePositiveOffsetPositiveLengthNoReplacement() {
@@ -376,7 +376,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key1' => 'val1',
       'key3' => 'val3'
-    ], $splice->all());
+    ], $splice->toArray());
   }
   
   public function testSplicePositiveOffsetNegativeLengthNoReplacement() {
@@ -389,7 +389,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key1' => 'val1',
       'key3' => 'val3'
-    ], $splice->all());
+    ], $splice->toArray());
   }
   
   public function testSpliceNegativeOffsetPositiveLengthNoReplacement() {
@@ -402,7 +402,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key1' => 'val1',
       'key3' => 'val3'
-    ], $splice->all());
+    ], $splice->toArray());
   }
   
   public function testSpliceNegativeOffsetNegativeLengthNoReplacement() {
@@ -415,7 +415,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key1' => 'val1',
       'key3' => 'val3'
-    ], $splice->all());
+    ], $splice->toArray());
   }
   
   public function testSplicePositiveOffsetPositiveLengthWithReplacement() {
@@ -431,7 +431,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
       'key1' => 'val1',
       0 => 'newval',
       'key3' => 'val3'
-    ], $splice->all());
+    ], $splice->toArray());
   }
   
   public function testSplicePositiveOffsetNegativeLengthWithReplacement() {
@@ -447,7 +447,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
       'key1' => 'val1',
       0 => 'newval',
       'key3' => 'val3'
-    ], $splice->all());
+    ], $splice->toArray());
   }
   
   public function testSpliceNegativeOffsetPositiveLengthWithReplacement() {
@@ -463,7 +463,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
       'key1' => 'val1',
       0 => 'newval',
       'key3' => 'val3'
-    ], $splice->all());
+    ], $splice->toArray());
   }
   
   public function testSpliceNegativeOffsetNegativeLengthWithReplacement() {
@@ -479,7 +479,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
       'key1' => 'val1',
       0 => 'newval',
       'key3' => 'val3'
-    ], $splice->all());
+    ], $splice->toArray());
   }
   
   public function testFilter() {
@@ -496,7 +496,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
       0 => 0,
       'a' => 1,
       1 => 'a'
-    ], $filtered->all());
+    ], $filtered->toArray());
   }
   
   public function testFilterByKeys() {
@@ -510,7 +510,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       0 => 0,
       1 => 'a'
-    ], $filtered->all());
+    ], $filtered->toArray());
   }
   
   public function testFilterByValues() {
@@ -524,7 +524,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       0 => 0,
       'a' => 1
-    ], $filtered->all());
+    ], $filtered->toArray());
   }
   
   public function testMap() {
@@ -540,7 +540,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
       1 => 'B',
       2 => 'C',
       3 => 'D'
-    ], $mapped->all());
+    ], $mapped->toArray());
   }
   
   public function testJoin() {
@@ -579,12 +579,12 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
   private function mockCollection(array $values = []) {
     $collection = $this
       ->getMockBuilder(Collection::class)
-      ->setMethods(['all'])
+      ->setMethods(['toArray'])
       ->getMockForAbstractClass()
     ;
     
     $collection
-      ->method('all')
+      ->method('toArray')
       ->willReturn($values)
     ;
     
