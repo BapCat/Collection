@@ -364,8 +364,8 @@ trait ReadableCollectionTrait {
    * 
    * @return  Collection
    */
-  public function merge(Collection $keys) {
-    return $this->__new(array_merge($keys->toArray(), $this->toArray()));
+  public function combine(Collection $keys) {
+    return $this->__new(array_combine($keys->toArray(), $this->toArray()));
   }
   
   /**

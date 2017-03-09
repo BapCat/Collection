@@ -242,7 +242,7 @@ interface Collection {
    * 
    * @return  Collection
    */
-  public function merge(Collection $keys);
+  public function combine(Collection $keys);
   
   /**
    * Concatenate all elements of the collection together, using `$glue` as a delimeter
