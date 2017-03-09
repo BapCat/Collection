@@ -357,6 +357,18 @@ trait ReadableCollectionTrait {
   }
   
   /**
+   * Creates a new collection with the values of this collection as the values, and the values
+   * (<b>not</b> the keys) of `$keys` as the keys.
+   * 
+   * @param  Collection  $keys  The keys for the new collection
+   * 
+   * @return  Collection
+   */
+  public function merge(Collection $keys) {
+    return $this->__new(array_merge($keys->toArray(), $this->toArray()));
+  }
+  
+  /**
    * Concatenate all elements of the collection together, using `$glue` as a delimeter
    * 
    * @param  string  $glue  (default: empty string)
