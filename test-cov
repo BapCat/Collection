@@ -4,4 +4,4 @@
 
 DIR=`dirname "$0"`
 
-$DIR/test --coverage-html $DIR/report "$@"
+$DIR/test --coverage-html $DIR/coverage "$@"
