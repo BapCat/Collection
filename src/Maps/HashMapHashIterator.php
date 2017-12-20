@@ -1,5 +1,6 @@
 <?php declare(strict_types=1); namespace BapCat\Collection\Maps;
 
+use BapCat\Collection\IllegalStateException;
 use BapCat\Collection\NoSuchElementException;
 
 abstract class HashMapHashIterator {
@@ -53,6 +54,6 @@ abstract class HashMapHashIterator {
 
     $this->current = null;
     $key = $p->getKey();
-    $this->removeNode(self::hash($key), $key, null, false, false);
+    $this->removeNode($key, null, false, false);
   }
 }

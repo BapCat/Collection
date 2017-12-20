@@ -124,6 +124,11 @@ class HashMap extends AbstractMap implements Map {
    */
   private $entrySet;
 
+  /**
+   * @param  $value
+   *
+   * @return  int
+   */
   private static function hash($value): int {
     return crc32(serialize($value));
   }
@@ -188,18 +193,19 @@ class HashMap extends AbstractMap implements Map {
    * @see #put(Object, Object)
    */
   public function get($key) {
-    return ($e = $this->getNode(self::hash($key), $key)) === null ? null : $e->getValue();
+    return ($e = $this->getNode($key)) === null ? null : $e->getValue();
   }
 
   /**
    * Implements Map.get and related methods
    *
-   * @param  int    $hash  Hash for key
-   * @param  mixed  $key   The key
+   * @param  mixed  $key  The key
    *
    * @return  HashMapNode|null  The node, or null if none
    */
-  private function getNode(int $hash, $key): ?HashMapNode {
+  private function getNode($key): ?HashMapNode {
+    $hash = self::hash($key);
+
     $n = $this->size();
 
     if($n > 0 && ($first = $this->table[$hash] ?? null) !== null) {
@@ -228,7 +234,7 @@ class HashMap extends AbstractMap implements Map {
    * @return  bool  <tt>true</tt> if this map contains a mapping for the specified key.
    */
   public function containsKey($key): bool {
-    return $this->getNode(self::hash($key), $key) !== null;
+    return $this->getNode($key) !== null;
   }
 
   /**
@@ -323,20 +329,21 @@ class HashMap extends AbstractMap implements Map {
    *         previously associated <tt>null</tt> with <tt>key</tt>.)
    */
   public function remove($key) {
-    return ($e = $this->removeNode(self::hash($key), $key, null, false)) === null ? null : $e->getValue();
+    return ($e = $this->removeNode($key, null, false)) === null ? null : $e->getValue();
   }
 
   /**
    * Implements Map.remove and related methods
    *
-   * @param  int    $hash        Hash for key
    * @param  mixed  $key         The key
    * @param  mixed  $value       The value to match if matchValue, else ignored
    * @param  bool   $matchValue  If true only remove if value is equal
    *
    * @return  HashMapNode  The node, or null if none
    */
-  private function removeNode(int $hash, $key, $value, bool $matchValue) {
+  private function removeNode($key, $value, bool $matchValue) {
+    $hash = self::hash($key);
+
     if(($p = $this->table[$hash] ?? null) !== null) {
       $node = null;
 
@@ -477,16 +484,34 @@ class HashMap extends AbstractMap implements Map {
 
   // Overrides of JDK8 Map extension methods
 
+  /**
+   * @param  mixed  $key
+   * @param  mixed  $defaultValue
+   *
+   * @return  mixed
+   */
   public function getOrDefault($key, $defaultValue) {
-    return ($e = $this->getNode(self::hash($key), $key)) === null ? $defaultValue : $e->getValue();
+    return ($e = $this->getNode($key)) === null ? $defaultValue : $e->getValue();
   }
 
+  /**
+   * @param  mixed  $key
+   * @param  mixed  $value
+   *
+   * @return  mixed
+   */
   public function putIfAbsent($key, $value) {
     return $this->putVal(self::hash($key), $key, $value, true, true);
   }
 
+  /**
+   * @param  mixed  $key
+   * @param  mixed  $value
+   *
+   * @return  mixed|null
+   */
   public function replace($key, $value) {
-    if(($e = $this->getNode(self::hash($key), $key)) !== null) {
+    if(($e = $this->getNode($key)) !== null) {
       $oldValue = $e->getValue();
       $e->setValue($value);
       $this->afterNodeAccess($e);
@@ -496,6 +521,12 @@ class HashMap extends AbstractMap implements Map {
     return null;
   }
 
+  /**
+   * @param  mixed  $key
+   * @param  Func   $mappingFunction
+   *
+   * @return  mixed|null
+   */
   public function computeIfAbsent($key, Func $mappingFunction) {
     $hash = self::hash($key);
     $old = null;
@@ -530,10 +561,14 @@ class HashMap extends AbstractMap implements Map {
     return $v;
   }
 
+  /**
+   * @param  mixed       $key
+   * @param  BiFunction  $remappingFunction
+   *
+   * @return  mixed|null
+   */
   public function computeIfPresent($key, BiFunction $remappingFunction) {
-    $hash = self::hash($key);
-
-    if(($e = $this->getNode($hash, $key)) !== null && ($oldValue = $e->getValue()) !== null) {
+    if(($e = $this->getNode($key)) !== null && ($oldValue = $e->getValue()) !== null) {
       $v = $remappingFunction->apply($key, $oldValue);
 
       if($v !== null) {
@@ -541,13 +576,19 @@ class HashMap extends AbstractMap implements Map {
         $this->afterNodeAccess($e);
         return $v;
       } else {
-        $this->removeNode($hash, $key, null, false);
+        $this->removeNode($key, null, false);
       }
     }
 
     return null;
   }
 
+  /**
+   * @param  mixed       $key
+   * @param  BiFunction  $remappingFunction
+   *
+   * @return  mixed
+   */
   public function compute($key, BiFunction $remappingFunction) {
     $hash = self::hash($key);
     $old = null;
@@ -572,7 +613,7 @@ class HashMap extends AbstractMap implements Map {
         $old->setValue($v);
         $this->afterNodeAccess($old);
       } else {
-        $this->removeNode($hash, $key, null, false);
+        $this->removeNode($key, null, false);
       }
     } elseif($v !== null) {
       $this->table[$hash] = $this->newNode($hash, $key, $v, $first);
@@ -582,6 +623,13 @@ class HashMap extends AbstractMap implements Map {
     return $v;
   }
 
+  /**
+   * @param  mixed       $key
+   * @param  mixed       $value
+   * @param  BiFunction  $remappingFunction
+   *
+   * @return  mixed
+   */
   public function merge($key, $value, BiFunction $remappingFunction) {
     $hash = self::hash($key);
     $old = null;
@@ -594,7 +642,6 @@ class HashMap extends AbstractMap implements Map {
           $old = $e;
           break;
         }
-
       } while(($e = $e->getNext()) !== null);
     }
 
@@ -609,7 +656,7 @@ class HashMap extends AbstractMap implements Map {
         $old->setValue($v);
         $this->afterNodeAccess($old);
       } else {
-        $this->removeNode($hash, $key, null, false);
+        $this->removeNode($key, null, false);
       }
 
       return $v;
@@ -623,6 +670,9 @@ class HashMap extends AbstractMap implements Map {
     return $value;
   }
 
+  /**
+   * @param  BiConsumer  $action
+   */
   public function each(BiConsumer $action): void {
     foreach($this->table as $node) {
       for($e = $node; $e !== null; $e = $e->getNext()) {
@@ -631,6 +681,9 @@ class HashMap extends AbstractMap implements Map {
     }
   }
 
+  /**
+   * @param  BiFunction  $function
+   */
   public function replaceAll(BiFunction $function): void {
     foreach($this->table as $node) {
       for($e = $node; $e !== null; $e = $e->getNext()) {
@@ -651,13 +704,32 @@ class HashMap extends AbstractMap implements Map {
    * classes, and HashSet.
    */
 
-  // Create a regular (non-tree) node
+  /**
+   * @param  int               $hash
+   * @param                    $key
+   * @param                    $value
+   * @param  HashMapNode|null  $next
+   *
+   * @return  HashMapNode
+   */
   private function newNode(int $hash, $key, $value, ?HashMapNode $next): HashMapNode {
     return new HashMapNode($hash, $key, $value, $next);
   }
 
   // Callbacks to allow LinkedHashMap post-actions
+
+  /**
+   * @param  HashMapNode  $p
+   */
   protected function afterNodeAccess(HashMapNode $p): void { }
+
+  /**
+   * @param  bool  $evict
+   */
   protected function afterNodeInsertion(bool $evict): void { }
+
+  /**
+   * @param  HashMapNode  $p
+   */
   protected function afterNodeRemoval(HashMapNode $p): void { }
 }

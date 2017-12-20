@@ -537,10 +537,10 @@ interface Map {
 
   /**
    * If the specified key is not already associated with a value (or is mapped
-   * to {@code null}), attempts to compute its value using the given mapping
-   * function and enters it into this map unless {@code null}.
+   * to <tt>null</tt>), attempts to compute its value using the given mapping
+   * function and enters it into this map unless <tt>null</tt>.
    *
-   * <p>If the function returns {@code null} no mapping is recorded. If
+   * <p>If the function returns <tt>null</tt> no mapping is recorded. If
    * the function itself throws an (unchecked) exception, the
    * exception is rethrown, and no mapping is recorded.  The most
    * common usage is to construct a new object serving as an initial
@@ -548,15 +548,13 @@ interface Map {
    *
    *     map.computeIfAbsent(key, k -> new Value(f(k)));
    *
-   * <p>Or to implement a multi-value map, {@code Map<K,Collection<V>>},
+   * <p>Or to implement a multi-value map, <tt>Map<K,Collection<V>></tt>,
    * supporting multiple values per key:
    *
    *     map.computeIfAbsent(key, k -> new HashSet<V>()).add(v);
    *
-   *
-   * @implSpec
    * The default implementation is equivalent to the following steps for this
-   * {@code map}, then returning the current value or {@code null} if now
+   * <tt>map</tt>, then returning the current value or <tt>null</tt> if now
    * absent:
    *
    *     if (map.get(key) == null) {
@@ -565,14 +563,6 @@ interface Map {
    *             map.put(key, newValue);
    *         }
    *     }
-   *
-   * <p>The default implementation makes no guarantees about synchronization
-   * or atomicity properties of this method. Any implementation providing
-   * atomicity guarantees must override this method and document its
-   * concurrency properties. In particular, all implementations of
-   * subinterface {@link java.util.concurrent.ConcurrentMap} must document
-   * whether the function is applied once atomically only if the value is not
-   * present.
    *
    * @param  mixed  $key              The key with which the specified value is to be associated
    * @param  Func   $mappingFunction  The function to compute a value
@@ -583,7 +573,7 @@ interface Map {
    * @throws NullPointerException if the specified key is null and
    *         this map does not support null keys, or the mappingFunction
    *         is null
-   * @throws UnsupportedOperationException if the {@code put} operation
+   * @throws UnsupportedOperationException if the <tt>put</tt> operation
    *         is not supported by this map
    *
    * @since 1.8
@@ -638,23 +628,22 @@ interface Map {
 
   /**
    * Attempts to compute a mapping for the specified key and its current
-   * mapped value (or {@code null} if there is no current mapping). For
-   * example, to either create or append a {@code String} msg to a value
+   * mapped value (or <tt>null</tt> if there is no current mapping). For
+   * example, to either create or append a <tt>string</tt> msg to a value
    * mapping:
    *
    *     map.compute(key, (k, v) -> (v == null) ? msg : v.concat(msg))
    *
-   * (Method {@link #merge merge()} is often simpler to use for such purposes.)
+   * (Method {@link merge()} is often simpler to use for such purposes.)
    *
-   * <p>If the function returns {@code null}, the mapping is removed (or
+   * <p>If the function returns <tt>null</tt>, the mapping is removed (or
    * remains absent if initially absent).  If the function itself throws an
    * (unchecked) exception, the exception is rethrown, and the current mapping
    * is left unchanged.
    *
-   * @implSpec
    * The default implementation is equivalent to performing the following
-   * steps for this {@code map}, then returning the current value or
-   * {@code null} if absent:
+   * steps for this <tt>map</tt>, then returning the current value or
+   * <tt>null</tt> if absent:
    *
    *     V oldValue = map.get(key);
    *     V newValue = remappingFunction.apply(key, oldValue);
@@ -672,14 +661,6 @@ interface Map {
    *         }
    *     }
    *
-   * <p>The default implementation makes no guarantees about synchronization
-   * or atomicity properties of this method. Any implementation providing
-   * atomicity guarantees must override this method and document its
-   * concurrency properties. In particular, all implementations of
-   * subinterface {@link java.util.concurrent.ConcurrentMap} must document
-   * whether the function is applied once atomically only if the value is not
-   * present.
-   *
    * @param  mixed       $key                The key with which the specified value is to be associated
    * @param  BiFunction  $remappingFunction  The function to compute a value
    *
@@ -688,7 +669,7 @@ interface Map {
    * @throws NullPointerException if the specified key is null and
    *         this map does not support null keys, or the
    *         remappingFunction is null
-   * @throws UnsupportedOperationException if the {@code put} operation
+   * @throws UnsupportedOperationException if the {@link put} operation
    *         is not supported by this map
    *
    * @since 1.8
@@ -699,23 +680,20 @@ interface Map {
    * If the specified key is not already associated with a value or is
    * associated with null, associates it with the given non-null value.
    * Otherwise, replaces the associated value with the results of the given
-   * remapping function, or removes if the result is {@code null}. This
+   * remapping function, or removes if the result is <tt>null</tt>. This
    * method may be of use when combining multiple mapped values for a key.
-   * For example, to either create or append a {@code String msg} to a
+   * For example, to either create or append a <tt>String msg</tt> to a
    * value mapping:
    *
-   * <pre> {@code
-   * map.merge(key, msg, String::concat)
-   * }</pre>
+   *     map.merge(key, msg, String::concat)
    *
-   * <p>If the function returns {@code null} the mapping is removed.  If the
+   * <p>If the function returns <tt>null</tt> the mapping is removed.  If the
    * function itself throws an (unchecked) exception, the exception is
    * rethrown, and the current mapping is left unchanged.
    *
-   * @implSpec
    * The default implementation is equivalent to performing the following
-   * steps for this {@code map}, then returning the current value or
-   * {@code null} if absent:
+   * steps for this <tt>map</tt>, then returning the current value or
+   * <tt>null</tt> if absent:
    *
    *    V oldValue = map.get(key);
    *    V newValue = (oldValue == null) ? value :
@@ -725,14 +703,6 @@ interface Map {
    *     } else {
    *         map.put(key, newValue);
    *     }
-   *
-   * <p>The default implementation makes no guarantees about synchronization
-   * or atomicity properties of this method. Any implementation providing
-   * atomicity guarantees must override this method and document its
-   * concurrency properties. In particular, all implementations of
-   * subinterface {@link java.util.concurrent.ConcurrentMap} must document
-   * whether the function is applied once atomically only if the value is not
-   * present.
    *
    * @param  mixed       $key    The key with which the resulting value is to be associated
    * @param  mixed       $value  The non-null value to be merged with the existing value

@@ -7,17 +7,27 @@ use BapCat\Collection\Sets\AbstractSet;
 
 class HashMapEntrySet extends AbstractSet {
   private $hashMap;
+  private $getNode;
+  private $removeNode;
   private $table;
 
-  public function __construct(HashMap $hashMap, array &$table) {
+  public function __construct(HashMap $hashMap, callable $getNode, callable $removeNode, array &$table) {
     $this->hashMap = $hashMap;
+    $this->getNode = $getNode;
+    $this->removeNode = $removeNode;
     $this->table = &$table;
   }
 
-  public function size(): int                 { return $this->hashMap->size(); }
-  public function clear(): void               { $this->hashMap->clear(); }
+  public function size(): int {
+    return $this->hashMap->size();
+  }
+
+  public function clear(): void {
+    $this->hashMap->clear();
+  }
+
   public function iterator(): Iterator {
-    return new EntryIterator();
+    return new HashMapEntryIterator();
   }
 
   public function contains($o): bool {
@@ -27,7 +37,7 @@ class HashMapEntrySet extends AbstractSet {
 
     /** @var  Entry  $o */
     $key = $o->getKey();
-    $candidate = getNode(hash($key), $key);
+    $candidate = ($this->getNode)($key);
     return $candidate !== null && $candidate === $o;
   }
 
@@ -36,22 +46,16 @@ class HashMapEntrySet extends AbstractSet {
       /** @var  Entry  $o */
       $key = $o->getKey();
       $value = $o->getValue();
-      return removeNode(hash($key), $key, $value, true, true) !== null;
+      return ($this->removeNode)($key, $value, true, true) !== null;
     }
 
     return false;
   }
 
   public function each(Consumer $action): void {
-    if($action === null) {
-      throw new NullPointerException();
-    }
-
-    if($this->hashMap->size() > 0 && ($tab = &$this->table) !== null) {
-      for($i = 0; $i < count($tab); ++$i) {
-        for($e = $tab[$i]; $e !== null; $e = $e->getNext()) {
-          $action->accept($e);
-        }
+    for($i = 0; $i < $this->hashMap->size(); ++$i) {
+      for($e = $this->table[$i]; $e !== null; $e = $e->getNext()) {
+        $action->accept($e);
       }
     }
   }
