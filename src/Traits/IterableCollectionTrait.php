@@ -7,11 +7,16 @@ use ArrayIterator;
  */
 trait IterableCollectionTrait {
   /**
+   * {@inheritDoc}
+   */
+  abstract function toArray();
+
+  /**
    * Gets the iterator necessary for `for` loops
    * 
-   * @returns ArrayIterator Necessary for iteration
+   * @return ArrayIterator Necessary for iteration
    */
   public function getIterator() {
-    return new ArrayIterator($this->all());
+    return new ArrayIterator($this->toArray());
   }
 }

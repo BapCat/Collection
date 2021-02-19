@@ -1,15 +1,18 @@
 <?php
 
-use BapCat\Collection\Traits\IterableCollectionTrait;
+namespace Traits;
 
-class IterableCollectionTraitTest extends PHPUnit_Framework_TestCase {
+use BapCat\Collection\Traits\IterableCollectionTrait;
+use PHPUnit\Framework\TestCase;
+
+class IterableCollectionTraitTest extends TestCase {
   private $trait;
   
-  public function setUp() {
+  public function setUp(): void {
     $this->trait = $this->mockTrait([
       'key1' => 'val1',
       'key2' => 'val2',
-      'key3' => 'val3'
+      'key3' => 'val3',
     ]);
   }
   
@@ -22,19 +25,19 @@ class IterableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame([
       'key1' => 'val1',
       'key2' => 'val2',
-      'key3' => 'val3'
+      'key3' => 'val3',
     ], $results);
   }
   
   private function mockTrait(array $values = []) {
     $trait = $this
       ->getMockBuilder(IterableCollectionTrait::class)
-      ->setMethods(['all'])
+      ->onlyMethods(['toArray'])
       ->getMockForTrait()
     ;
     
     $trait
-      ->method('all')
+      ->method('toArray')
       ->willReturn($values)
     ;
     

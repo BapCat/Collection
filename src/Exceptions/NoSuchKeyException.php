@@ -14,7 +14,7 @@ class NoSuchKeyException extends Exception {
    * @param string    $key      The requested key
    * @param string    $message  (optional) A message to include with the exception
    * @param int       $code     (optional) A code to include with the exception
-   * @param Exception $previous (optional) An exception to be wrapped by this one
+   * @param Exception|null $previous (optional) An exception to be wrapped by this one
    */
   public function __construct($key, $message = '', $code = 0, Exception $previous = null) {
     parent::__construct($message, $code, $previous);

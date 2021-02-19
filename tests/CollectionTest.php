@@ -3,8 +3,9 @@
 use BapCat\Collection\Collection;
 use BapCat\Collection\Interfaces\Collection as CollectionInterface;
 use BapCat\Collection\Interfaces\WritableCollection;
+use PHPUnit\Framework\TestCase;
 
-class CollectionTest extends PHPUnit_Framework_TestCase {
+class CollectionTest extends TestCase {
   public function testCollectionImplementsProperInterfaces() {
     $collection = new Collection();
     
@@ -18,7 +19,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase {
   public function testConstructEmpty() {
     $collection = new Collection();
     
-    $this->assertEmpty($collection->all());
+    $this->assertEmpty($collection->toArray());
   }
   
   public function testConstructWithContent() {
@@ -26,7 +27,7 @@ class CollectionTest extends PHPUnit_Framework_TestCase {
     
     $collection = new Collection($values);
     
-    $this->assertSame($values, $collection->all());
+    $this->assertSame($values, $collection->toArray());
   }
   
   public function testInstantiator() {

@@ -1,14 +1,18 @@
 <?php
 
+namespace Traits;
+
 use BapCat\Collection\Exceptions\NoSuchKeyException;
 use BapCat\Collection\Traits\WritableCollectionTrait;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class WritableCollectionTraitTest extends PHPUnit_Framework_TestCase {
+class WritableCollectionTraitTest extends TestCase {
   private $trait;
   private $collection;
   private $lazy;
   
-  public function setUp() {
+  public function setUp(): void {
     $this->trait = $this
       ->getMockBuilder(WritableCollectionTrait::class)
       ->getMockForTrait()
@@ -80,7 +84,7 @@ class WritableCollectionTraitTest extends PHPUnit_Framework_TestCase {
     $this->assertSame(['key2' => 'val2'], $this->getCollection());
     $this->assertSame('already removed', $this->trait->take('key1', 'already removed'));
     
-    $this->setExpectedException(NoSuchKeyException::class);
+    $this->expectException(NoSuchKeyException::class);
     $this->trait->take('non-existant key');
   }
   

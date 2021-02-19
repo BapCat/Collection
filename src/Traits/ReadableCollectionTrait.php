@@ -7,6 +7,9 @@ use BapCat\Collection\Interfaces\Collection;
  * A basic implementation of Collection
  */
 trait ReadableCollectionTrait {
+  /** {@inheritDoc} */
+  public abstract function __new(array $initial);
+
   /**
    * Check if the collection contains a key
    * 
@@ -131,7 +134,7 @@ trait ReadableCollectionTrait {
    * 
    * @throws  NoSuchKeyException  If the collection is empty
    * 
-   * @return  mixed  The last key and value from the collection
+   * @return  mixed[]  The last key and value from the collection
    */
   public function lastPair() {
     if($this->size() == 0) {
@@ -266,8 +269,8 @@ trait ReadableCollectionTrait {
   /**
    * Extracts a contiguous section of this collection into a new collection
    * 
-   * @param  int   $offset  The start of the slice
-   * @param  ?int  $length  The length of the slice
+   * @param  int       $offset  The start of the slice
+   * @param  int|null  $length  The length of the slice
    * 
    * @return  Collection  A new collection containing a contiguous subset of this collection
    */
@@ -281,9 +284,9 @@ trait ReadableCollectionTrait {
    * 
    * @note  This function <b>will not</b> preserve keys
    * 
-   * @param  int          $offset       The start of the splice
-   * @param  int          $length       The length of the splice
-   * @param  ?Collection  $replacement  (default: null) What to replace the spliced section with
+   * @param  int              $offset       The start of the splice
+   * @param  int              $length       The length of the splice
+   * @param  Collection|null  $replacement  (default: null) What to replace the spliced section with
    * 
    * @return  Collection  A new collection containing a contiguous subset of this collection
    */

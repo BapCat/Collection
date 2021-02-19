@@ -3,8 +3,9 @@
 use BapCat\Collection\ReadOnlyCollection;
 use BapCat\Collection\Interfaces\Collection;
 use BapCat\Collection\Interfaces\WritableCollection;
+use PHPUnit\Framework\TestCase;
 
-class ReadOnlyCollectionTest extends PHPUnit_Framework_TestCase {
+class ReadOnlyCollectionTest extends TestCase {
   public function testCollectionImplementsProperInterfaces() {
     $collection = new ReadOnlyCollection();
     
@@ -18,7 +19,7 @@ class ReadOnlyCollectionTest extends PHPUnit_Framework_TestCase {
   public function testConstructEmpty() {
     $collection = new ReadOnlyCollection();
     
-    $this->assertEmpty($collection->all());
+    $this->assertEmpty($collection->toArray());
   }
   
   public function testConstructWithContent() {
@@ -26,7 +27,7 @@ class ReadOnlyCollectionTest extends PHPUnit_Framework_TestCase {
     
     $collection = new ReadOnlyCollection($values);
     
-    $this->assertSame($values, $collection->all());
+    $this->assertSame($values, $collection->toArray());
   }
   
   public function testInstantiator() {

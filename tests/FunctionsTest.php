@@ -1,11 +1,12 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use function BapCat\Collection\collect;
 
-class FunctionsTest extends PHPUnit_Framework_TestCase {
+class FunctionsTest extends TestCase {
   public function testCollect() {
     $collection = collect(['test']);
     
-    $this->assertSame(['test'], $collection->all());
+    $this->assertSame(['test'], $collection->toArray());
   }
 }
