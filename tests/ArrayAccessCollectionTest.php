@@ -3,8 +3,9 @@
 use BapCat\Collection\ArrayAccessCollection;
 use BapCat\Collection\Interfaces\Collection;
 use BapCat\Collection\Interfaces\WritableCollection;
+use PHPUnit\Framework\TestCase;
 
-class ArrayAccessCollectionTest extends PHPUnit_Framework_TestCase {
+class ArrayAccessCollectionTest extends TestCase {
   public function testCollectionImplementsProperInterfaces() {
     $collection = new ArrayAccessCollection();
     
@@ -17,7 +18,7 @@ class ArrayAccessCollectionTest extends PHPUnit_Framework_TestCase {
   public function testConstructEmpty() {
     $collection = new ArrayAccessCollection();
     
-    $this->assertEmpty($collection->all());
+    $this->assertEmpty($collection->toArray());
   }
   
   public function testConstructWithContent() {
@@ -25,7 +26,7 @@ class ArrayAccessCollectionTest extends PHPUnit_Framework_TestCase {
     
     $collection = new ArrayAccessCollection($values);
     
-    $this->assertSame($values, $collection->all());
+    $this->assertSame($values, $collection->toArray());
   }
   
   public function testInstantiator() {

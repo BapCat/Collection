@@ -14,7 +14,7 @@ trait WritableCollectionTrait {
   /**
    * Holds all lazy-loaded keys
    * 
-   * @var  array<mixed>
+   * @var  mixed[]
    */
   protected $lazy = [];
   
@@ -88,6 +88,8 @@ trait WritableCollectionTrait {
    * Removes a key from the array
    * 
    * @param mixed $key    The key to remove
+   *
+   * @return void
    */
   public function remove($key) {
     unset($this->collection[$key]);

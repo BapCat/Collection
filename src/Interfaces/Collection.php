@@ -1,5 +1,7 @@
 <?php namespace BapCat\Collection\Interfaces;
 
+use BapCat\Collection\Exceptions\NoSuchKeyException;
+
 /**
  * Defines an immutable collection (although the implementation may be mutable)
  */
@@ -18,7 +20,7 @@ interface Collection {
   /**
    * Search for a value and return its key
    * 
-   * @throws  NoSuchValueException  If `$value` wasn't found
+   * @throws  NoSuchKeyException  If `$value` wasn't found
    * 
    * @param  mixed  $value
    * 

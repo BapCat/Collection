@@ -1,13 +1,16 @@
 <?php
 
+namespace Traits;
+
 use BapCat\Collection\Exceptions\NoSuchKeyException;
 use BapCat\Collection\Interfaces\Collection;
 use BapCat\Collection\Traits\ReadableCollectionTrait;
+use PHPUnit\Framework\TestCase;
 
-class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
+class ReadableCollectionTraitTest extends TestCase {
   private $trait;
   
-  public function setUp() {
+  public function setUp(): void {
     $this->trait = $this->mockTrait();
   }
   
@@ -32,7 +35,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testBasicGetWithInvalidKeyAndNoDefaultValue() {
-    $this->setExpectedException(NoSuchKeyException::class);
+    $this->expectException(NoSuchKeyException::class);
     $this->assertSame('val', $this->trait->get('key'));
   }
   
@@ -65,7 +68,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testFirstWithEmptyCollectionThrowsException() {
-    $this->setExpectedException(NoSuchKeyException::class);
+    $this->expectException(NoSuchKeyException::class);
     $this->trait->first();
   }
   
@@ -89,7 +92,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
   }
   
   public function testLastWithEmptyCollectionThrowsException() {
-    $this->setExpectedException(NoSuchKeyException::class);
+    $this->expectException(NoSuchKeyException::class);
     $this->trait->last();
   }
   
@@ -556,7 +559,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
   private function mockTrait(array $values = []) {
     $trait = $this
       ->getMockBuilder(ReadableCollectionTrait::class)
-      ->setMethods(['__new'])
+      ->onlyMethods(['__new'])
       ->getMockForTrait()
     ;
     
@@ -579,7 +582,7 @@ class ReadableCollectionTraitTest extends PHPUnit_Framework_TestCase {
   private function mockCollection(array $values = []) {
     $collection = $this
       ->getMockBuilder(Collection::class)
-      ->setMethods(['toArray'])
+      ->onlyMethods(['toArray'])
       ->getMockForAbstractClass()
     ;
     

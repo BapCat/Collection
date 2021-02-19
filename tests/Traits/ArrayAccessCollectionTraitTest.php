@@ -1,12 +1,15 @@
 <?php
 
-use BapCat\Collection\Traits\ArrayAccessCollectionTrait;
+namespace Traits;
 
-class ArrayAccessCollectionTraitTest extends PHPUnit_Framework_TestCase {
+use BapCat\Collection\Traits\ArrayAccessCollectionTrait;
+use PHPUnit\Framework\TestCase;
+
+class ArrayAccessCollectionTraitTest extends TestCase {
   private $trait;
   private $collection;
   
-  public function setUp() {
+  public function setUp(): void {
     $this->trait = $this->mockTrait();
   }
   
@@ -27,7 +30,7 @@ class ArrayAccessCollectionTraitTest extends PHPUnit_Framework_TestCase {
   private function mockTrait() {
     $trait = $this
       ->getMockBuilder(ArrayAccessCollectionTrait::class)
-      ->setMethods(['has', 'get', 'add', 'set', 'remove'])
+      ->onlyMethods(['has', 'get', 'add', 'set', 'remove'])
       ->getMockForTrait()
     ;
     

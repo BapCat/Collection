@@ -1,8 +1,8 @@
 {
   "name": "bapcat/collection",
   "description": "Powerful but easy to use collections with support for lazy loading",
-  "license": "GPLv3",
-  "homepage": "http://github.com/BapCat/Collection",
+  "license" : "GPL-3.0-or-later",
+  "homepage": "https://github.com/BapCat/Collection",
   "keywords": ["Collection", "Array", "Storage", "Read only", "Lazy"],
   "authors": [
     {
@@ -10,11 +10,19 @@
       "email": "corey@narwhunderful.com"
     }
   ],
+  "config": {
+    "preferred-install": "dist",
+    "platform": {
+      "php": "7.4"
+    },
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
   "require": {
-    "php": ">=5.6.0"
+    "php" : "^7.4|^8.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^5.0"
+    "phpunit/phpunit": "^9.5"
   },
   "autoload": {
     "psr-4": {
