@@ -27,7 +27,7 @@ trait ArrayAccessCollectionTrait {
    *
    * @return void
    */
-  public function offsetSet($offset, $value) {
+  public function offsetSet($offset, $value): void {
     if(is_null($offset)) {
       $this->add($value);
     } else {
@@ -40,9 +40,9 @@ trait ArrayAccessCollectionTrait {
    * 
    * @param mixed $offset The key
    *
-   * @return void
+   * @return bool
    */
-  public function offsetExists($offset) {
+  public function offsetExists($offset): bool {
     return $this->has($offset);
   }
   
@@ -53,7 +53,7 @@ trait ArrayAccessCollectionTrait {
    *
    * @return void
    */
-  public function offsetUnset($offset) {
+  public function offsetUnset($offset): void {
     $this->remove($offset);
   }
   
@@ -64,7 +64,7 @@ trait ArrayAccessCollectionTrait {
    *
    * @return mixed
    */
-  public function offsetGet($offset) {
+  public function offsetGet($offset): mixed {
     return $this->get($offset);
   }
 }
