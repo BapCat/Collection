@@ -1,6 +1,7 @@
 <?php namespace BapCat\Collection\Traits;
 
 use ArrayIterator;
+use Traversable;
 
 /**
  * Allows collection access via `for` loops
@@ -9,14 +10,14 @@ trait IterableCollectionTrait {
   /**
    * {@inheritDoc}
    */
-  abstract function toArray();
+  public abstract function toArray();
 
   /**
    * Gets the iterator necessary for `for` loops
    * 
-   * @return ArrayIterator Necessary for iteration
+   * @return Traversable Necessary for iteration
    */
-  public function getIterator(): ArrayIterator {
+  public function getIterator(): Traversable {
     return new ArrayIterator($this->toArray());
   }
 }
